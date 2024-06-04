@@ -9,6 +9,7 @@ import {
 import { BullBoardModule } from '@bull-board/nestjs'
 import { FastifyAdapter } from '@bull-board/fastify'
 import { BullAdapter } from '@bull-board/api/bullAdapter'
+import { MessagingModule } from 'src/infra/messaging/messaging.module'
 
 @Module({
   imports: [
@@ -22,6 +23,8 @@ import { BullAdapter } from '@bull-board/api/bullAdapter'
         },
       }),
     }),
+    MessagingModule,
+
     // Queues
     BullModule.registerQueue({
       name: PING_DEVICES_QUEUE,

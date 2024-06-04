@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { envSchema } from './env/env'
 import { EnvModule } from './env/env.module'
-import { BullConfigModule } from './schedules/bull/bull.module'
 import { MessagingModule } from './messaging/messaging.module'
 
 @Module({
@@ -12,7 +11,6 @@ import { MessagingModule } from './messaging/messaging.module'
       isGlobal: true,
     }),
     EnvModule,
-    BullConfigModule,
     MessagingModule,
   ],
 })

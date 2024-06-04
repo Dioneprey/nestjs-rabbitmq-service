@@ -4,7 +4,7 @@ services:
   database:
     container_name: galp-main-api
     env_file:
-      - .env
+      - ./main-api/.env
     image: 'postgres'
     ports:
       - '5432:5432'
@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}    
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - ./docker-volume/postgres:/var/lib/postgresql/data
     networks:
       - network
 
@@ -34,35 +34,22 @@ services:
     ports:
       - "6380:6379"
     volumes:
-      - ./redis:/data
+      - ./docker-volume/redis:/data
     restart: always
     command: redis-server --appendonly yes
     networks:
       - network
 
-  mongo:
-    image: mongo
+  rabbitmq:
+    image: rabbitmq:3.8-management
     ports:
-      - '2727:27017'
-    volumes:
-      - ./mongo:/data/db
-    restart: always
-    networks:
-      - network
-
-  mongo-express:
-    image: mongo-express
-    ports:
-      - 8585:8081
+      - "5672:5672"
+      - "15672:15672"
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: user
-      ME_CONFIG_BASICAUTH_PASSWORD: pass
-      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
-    depends_on:
-      - mongo
-    restart: always
-    links:
-      - mongo:mongodb
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - ./docker-volume/rabbitmq_data:/var/lib/rabbitmq
     networks:
       - network
 
