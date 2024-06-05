@@ -24,7 +24,11 @@ export class PingDevicesProducerService {
     try {
       await this.channelWrapper.sendToQueue(
         'ping-devices-queue',
-        Buffer.from(JSON.stringify({ message: 'ping-aqui' })),
+        Buffer.from(
+          JSON.stringify({
+            message: 'main-api solicitando ping em dispositivos',
+          }),
+        ),
         {
           persistent: true,
         },

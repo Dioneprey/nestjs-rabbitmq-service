@@ -22,6 +22,8 @@ export class DevicesStatusProducerService {
 
   async queue() {
     try {
+      await new Promise((resolve) => setTimeout(resolve, 5000))
+
       await this.channelWrapper.sendToQueue(
         'devices-status-queue',
         Buffer.from(JSON.stringify({ status: 'alive' })),
