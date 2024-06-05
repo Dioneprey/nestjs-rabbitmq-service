@@ -1,12 +1,15 @@
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Socket, io } from 'socket.io-client'
+import { EnvService } from '../env/env.service'
 
 @Injectable()
 export class IotDeviceService implements OnModuleInit {
   private socket: Socket
 
+  constructor(private envService: EnvService) {}
+
   onModuleInit(): void {
-    this.socket = io('http://localhost:3334') // substitua com o URL do seu servidor
+    this.socket = io(this.envService.get('SOCKET_SERVER_URL')) // substitua com o URL do seu servidor
 
     this.socket.on('connect', () => {
       console.log('Conectado ao servidor IoT')
