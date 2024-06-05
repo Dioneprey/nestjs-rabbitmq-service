@@ -2,7 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { AmqpConnectionManager, ChannelWrapper } from 'amqp-connection-manager'
 import { ConfirmChannel } from 'amqplib'
 import { RabbitMQService } from '../rabbitmq.service'
-import { DevicesStatusProducerService } from '../producers/devices-status-producer.service'
+import { PingGateway } from 'src/infra/socket/gateways/ping.gateway'
 
 @Injectable()
 export class PingDevicesConsumerService implements OnModuleInit {
@@ -13,7 +13,7 @@ export class PingDevicesConsumerService implements OnModuleInit {
 
   constructor(
     private rabbitMQService: RabbitMQService,
-    private devicesStatusProducerService: DevicesStatusProducerService,
+    private pingGateway: PingGateway,
   ) {
     this.connection = this.rabbitMQService.getConnection()
 
@@ -27,21 +27,21 @@ export class PingDevicesConsumerService implements OnModuleInit {
         await channel.consume('ping-devices-queue', async (message) => {
           if (message) {
             const content = JSON.parse(message.content.toString())
-            this.logger.log(
-              'service-iot - ping-devices-queue - Received message:',
+            this.logger.log({
+              log: 'service-iot - ping-devices-queue - Received message:',
               content,
-            )
+            })
             channel.ack(message)
 
-            await this.devicesStatusProducerService.queue()
+            this.pingGateway.pingDevice()
           }
         })
       })
     } catch (err) {
-      this.logger.error(
-        'service-iot - Error starting the consumer - ping-devices-queue:',
+      this.logger.error({
+        log: 'service-iot - Error starting the consumer - ping-devices-queue:',
         err,
-      )
+      })
     }
   }
 }

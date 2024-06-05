@@ -2,18 +2,17 @@ import {
   WebSocketGateway,
   OnGatewayConnection,
   WebSocketServer,
-  SubscribeMessage,
-  MessageBody,
-  ConnectedSocket,
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
 import { SocketService } from '../socket.service'
+import { Logger } from '@nestjs/common'
 
 @WebSocketGateway({
   cors: '*',
 })
 export class PingGateway implements OnGatewayConnection {
   @WebSocketServer() server: Server
+  private readonly logger = new Logger(PingGateway.name)
 
   constructor(private readonly socketService: SocketService) {}
 
@@ -21,12 +20,13 @@ export class PingGateway implements OnGatewayConnection {
     this.socketService.handleConnection(socket)
   }
 
-  @SubscribeMessage('ping')
-  handleJoin(
-    @MessageBody() payload: { userId: string },
-    @ConnectedSocket() client: Socket,
-  ): void {
-    client.join(payload.userId)
-    console.log('Serviço IOT pingou dispositivo')
+  pingDevice() {
+    const deviceIot = this.socketService.getClients()
+    deviceIot.forEach((device) => {
+      this.logger.log({
+        log: `Serviço IOT pingou dispositivo: ${device.id}`,
+      })
+      device.emit('ping')
+    })
   }
 }

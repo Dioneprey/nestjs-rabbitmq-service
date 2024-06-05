@@ -23,19 +23,19 @@ export class DevicesStatusConsumerService implements OnModuleInit {
         await channel.consume('devices-status-queue', async (message) => {
           if (message) {
             const content = JSON.parse(message.content.toString())
-            this.logger.log(
-              'main-api - devices-status-queue - Received message:',
+            this.logger.log({
+              log: 'main-api - devices-status-queue - Received message:',
               content,
-            )
+            })
             channel.ack(message)
           }
         })
       })
     } catch (err) {
-      this.logger.error(
-        'main-api - Error starting the consumer - devices-status-queue:',
+      this.logger.error({
+        log: 'main-api - Error starting the consumer - devices-status-queue:',
         err,
-      )
+      })
     }
   }
 }

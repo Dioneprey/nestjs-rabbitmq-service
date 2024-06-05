@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common'
-import { PingGateway } from './gateways/ping.gateway'
-import { SocketService } from './socket.service'
+import { IotDeviceService } from './iot-device.service'
 
 @Module({
-  providers: [PingGateway, SocketService],
-  exports: [PingGateway],
+  providers: [IotDeviceService],
 })
 export class SocketModule {}

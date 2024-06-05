@@ -33,7 +33,9 @@ export class PingDevicesProducerService {
           persistent: true,
         },
       )
-      this.logger.log('main-api Sent To Queue - ping-devices-queue')
+      this.logger.log({
+        log: 'main-api Sent To Queue - ping-devices-queue',
+      })
     } catch (error) {
       throw new HttpException(
         'main-api - Error adding to queue - ping-devices-queue',

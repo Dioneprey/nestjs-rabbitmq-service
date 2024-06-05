@@ -20,18 +20,20 @@ export class DevicesStatusProducerService {
     })
   }
 
-  async queue() {
+  async queue({ deviceId, status }: { deviceId: string; status: string }) {
     try {
       await new Promise((resolve) => setTimeout(resolve, 5000))
 
       await this.channelWrapper.sendToQueue(
         'devices-status-queue',
-        Buffer.from(JSON.stringify({ status: 'alive' })),
+        Buffer.from(JSON.stringify({ deviceId, status })),
         {
           persistent: true,
         },
       )
-      this.logger.log('service-iot - Sent To Queue - devices-status-queue')
+      this.logger.log({
+        log: 'service-iot - Sent To Queue - devices-status-queue',
+      })
     } catch (error) {
       throw new HttpException(
         'service-iot - Error adding to queue - devices-status-queue',
