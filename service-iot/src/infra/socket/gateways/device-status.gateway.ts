@@ -1,31 +1,24 @@
 import {
   WebSocketGateway,
-  OnGatewayConnection,
   WebSocketServer,
   SubscribeMessage,
   MessageBody,
 } from '@nestjs/websockets'
-import { Server, Socket } from 'socket.io'
-import { SocketService } from '../socket.service'
+import { Server } from 'socket.io'
 import { Logger } from '@nestjs/common'
 import { DevicesStatusProducerService } from 'src/infra/messaging/rabbitmq/producers/devices-status-producer.service'
 
 @WebSocketGateway({
   cors: '*',
 })
-export class DeviceStatusGateway implements OnGatewayConnection {
+export class DeviceStatusGateway {
   @WebSocketServer() server: Server
 
   private readonly logger = new Logger(DeviceStatusGateway.name)
 
   constructor(
-    private readonly socketService: SocketService,
     private devicesStatusProducerService: DevicesStatusProducerService,
   ) {}
-
-  handleConnection(socket: Socket): void {
-    this.socketService.handleConnection(socket)
-  }
 
   @SubscribeMessage('device-status')
   receiveStatus(

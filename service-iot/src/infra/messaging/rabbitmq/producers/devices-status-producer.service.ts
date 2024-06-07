@@ -22,8 +22,6 @@ export class DevicesStatusProducerService {
 
   async queue({ deviceId, status }: { deviceId: string; status: string }) {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 5000))
-
       await this.channelWrapper.sendToQueue(
         'devices-status-queue',
         Buffer.from(JSON.stringify({ deviceId, status })),

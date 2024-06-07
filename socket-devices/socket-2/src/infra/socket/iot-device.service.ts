@@ -20,7 +20,7 @@ export class IotDeviceService implements OnModuleInit {
 
       const possibleStatus = ['alive', 'dead', 'busy']
 
-      await new Promise((resolve) => setTimeout(resolve, 5000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       const randomStatus =
         possibleStatus[Math.floor(Math.random() * possibleStatus.length)]

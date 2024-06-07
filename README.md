@@ -10,6 +10,7 @@ Testando integração entre uma API principal, um serviço e um dispositivo IoT.
 ## Como usar
 
 1.
+Criar arquivo .env em ./main-api, pode usar os mesmos dados do .env.example, não precisa criar .env nas outras aplicações pois tem valores default
 ```
 docker compose up -d
 ```
@@ -28,6 +29,12 @@ npm run start:dev
 ---
 ```
 cd socket-devices/socket-1
+npm install
+npm run start:dev
+```
+---
+```
+cd socket-devices/socket-2
 npm install
 npm run start:dev
 ```
