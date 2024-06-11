@@ -5,11 +5,18 @@ import { EnvService } from '../env/env.service'
 @Injectable()
 export class IotDeviceService implements OnModuleInit {
   private socket: Socket
+  private uniqueID: string
 
   constructor(private envService: EnvService) {}
 
   onModuleInit(): void {
-    this.socket = io(this.envService.get('SOCKET_SERVER_URL')) // substitua com o URL do seu servidor
+    this.uniqueID = 'mac-dispositivo-1'
+
+    this.socket = io(this.envService.get('SOCKET_SERVER_URL'), {
+      query: {
+        clientId: this.uniqueID,
+      },
+    })
 
     this.socket.on('connect', () => {
       console.log('Conectado ao servidor IoT')
@@ -26,7 +33,7 @@ export class IotDeviceService implements OnModuleInit {
         possibleStatus[Math.floor(Math.random() * possibleStatus.length)]
 
       this.socket.emit('device-status', {
-        deviceId: this.socket.id,
+        deviceId: this.uniqueID,
         status: randomStatus,
       })
     })

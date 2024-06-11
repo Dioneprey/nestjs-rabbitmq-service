@@ -7,7 +7,8 @@ export class SocketService {
   private readonly logger = new Logger(SocketService.name)
 
   handleConnection(socket: Socket): void {
-    const clientId = socket.id
+    const clientId = String(socket.handshake.query.clientId)
+
     this.connectedClients.set(clientId, socket)
     this.logger.log({
       log: 'Cliente socket conectou ao servidor',
