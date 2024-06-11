@@ -33,7 +33,7 @@ export class PingDevicesConsumerService implements OnModuleInit {
             })
             channel.ack(message)
 
-            this.pingGateway.pingDevice()
+            this.pingGateway.pingConnectedDevices()
           }
         })
       })

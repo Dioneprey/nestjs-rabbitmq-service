@@ -12,13 +12,30 @@ export class PingGateway {
 
   constructor(private readonly socketService: SocketService) {}
 
-  pingDevice() {
+  pingConnectedDevices() {
     const devicesIotConnected = this.socketService.getClients()
     devicesIotConnected.forEach((device) => {
       this.logger.log({
         log: `Serviço IOT pingou dispositivo: ${device.handshake.query.clientId}`,
       })
       device.emit('ping')
+    })
+  }
+
+  pingDevicesById(devicesId: string[]) {
+    const devicesIotConnected = this.socketService.getClients()
+    devicesId.forEach((id) => {
+      const device = devicesIotConnected.get(id)
+      if (device) {
+        this.logger.log({
+          log: `Serviço IOT pingou dispositivo: ${id}`,
+        })
+        device.emit('ping')
+      } else {
+        this.logger.log({
+          log: `Dispositivo ${id} não está conectado.`,
+        })
+      }
     })
   }
 }
