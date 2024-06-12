@@ -33,7 +33,9 @@ export class PingDevicesConsumerService implements OnModuleInit {
             })
             channel.ack(message)
 
-            this.pingGateway.pingConnectedDevices()
+            const devicesMacAddress = ['mac-dispositivo-1', 'mac-dispositivo-2']
+
+            this.pingGateway.pingDevicesById(devicesMacAddress)
           }
         })
       })
